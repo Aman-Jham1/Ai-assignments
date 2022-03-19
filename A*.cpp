@@ -90,18 +90,22 @@ int32_t main() {
   //   }
   //   if (n == goal) {
   //       cout << "SOLUTION FOUND : \n";
+  //       cout << "TOTAL DISTANCE : " << g[n] << '\n';
+  //       cout << "PATH : ";
   //       vector <int> path;
   //       while (parents[n] != n) {
   //           path.push_back(n);
   //           n = parents[n];
   //       }
   //       path.push_back(start);
-  //       reverse(all(path));
-  //       for (auto &x : path) {
-  //           cout << x << " ";
-  //       } 
-  //       cout << '\n';
-  //       return 0;
+           // reverse(all(path));
+           // int cnt = 0;
+           // for (auto &x : path) {
+           //      cout << x << " ";
+           //      if (cnt++ < path.size() - 1) cout << "-> ";
+           // } 
+           // cout << '\n';
+           // return 0;
   //   }
   //   for (auto &[v, w] : graph[n]) {
   //       if (!open_list.count(v) and !closed_list.count(v)) {
@@ -134,6 +138,8 @@ int32_t main() {
     int n = *open_list.begin();
     if (n == goal) {
         cout << "SOLUTION FOUND : \n";
+        cout << "TOTAL DISTANCE : " << g[n] << '\n';
+        cout << "PATH : ";
         vector <int> path;
         while (parents[n] != n) {
             path.push_back(n);
@@ -141,8 +147,10 @@ int32_t main() {
         }
         path.push_back(start);
         reverse(all(path));
+        int cnt = 0;
         for (auto &x : path) {
             cout << x << " ";
+            if (cnt++ < path.size() - 1) cout << "-> ";
         } 
         cout << '\n';
         return 0;
