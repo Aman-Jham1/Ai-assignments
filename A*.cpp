@@ -27,6 +27,32 @@
     Heursitics value - straight line distance which will be given as an input.
 */
 
+
+/*
+    TEST CASE : 
+    14 17
+    0 13
+    0 1 120
+    1 2 113
+    2 3 72
+    3 4 77
+    4 5 122
+    5 6 126
+    6 11 140
+    11 13 105
+    6 12 148
+    12 11 99
+    12 9 82
+    0 9 142
+    0 7 77
+    7 8 71
+    8 9 122
+    9 10 111
+    10 13
+    213
+    550 550 450 510 325 415 235 455 400 325 240 170 205 0
+*/
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -185,4 +211,3 @@ int32_t main() {
 
   return 0;
 }
-
