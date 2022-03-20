@@ -1,8 +1,17 @@
 /*
     AI Assignment-1.
     Aman Jham - 2019A7PS0071H
-    R Vedang - 
-    Shubh - 
+    R Vedang - 2019A7PS0150H
+    Shubh - 2019A7PS0100H
+*/
+
+/*
+    Problem: A dart board is filled with 12 sectors. Each sector can perform 4 operations, rotate clockwise, rotate
+    anticlockwise, shift down (till center). Given an initial state (Fig. A), design and implement an efficient
+    heuristic approach to reach the goal state (Fig B). Use Steepest Ascent Hill-Climbing Search with an
+    appropriate heuristic evaluation function. During the execution, you may check if your heuristic
+    evaluation function is prone to issues like local maxima, plateau or ridges as discussed in the class. You
+    need not provide any solution to these problems at this stage.
 */
 
 #include <bits/stdc++.h>
@@ -16,13 +25,17 @@ private:
     vector <int> board;
 public:
     Board() {
-        board.resize(12);
+        this->board.resize(12);
+    }
+    // Board(const Board &other) {
+    //     this->board.resize(12);
+    //     this->board = other.get_board();
+    // }
+    void set_board(vector <int> board) {
+        this->board = board;
     }
     vector <int> get_board() {
         return this->board;
-    }
-    void set_board(vector <int> board) {
-        this->board = board;
     }
     vector <int> operate(int sector_no, int type) {
         vector <int> new_board(12);
@@ -30,11 +43,54 @@ public:
         /*
             OPeration accordingly.
         */
-        this->board = new_board;
+        //this->board = new_board;
         return board;
+    }
+    Board clockwise(vector <int> a, int x) {
+        Board new_board;
+        int val = a[x * 4 + 3];
+        a[4 * x + 3] = a[x * 4 + 2];
+        a[4 * x + 2] = a[x * 4 + 1];
+        a[4 * x + 1] = a[x * 4 + 0];
+        a[x * 4 + 0] = val;
+        new_board.set_board(a);
+        return new_board;
+    }   
+    Board anti_clockwise(vector <int> a, int x) {
+        Board new_board;
+        int val = a[x * 4 + 0];
+        a[4 * x + 0] = a[x * 4 + 1];
+        a[4 * x + 1] = a[x * 4 + 2];
+        a[4 * x + 2] = a[x * 4 + 3];
+        a[x * 4 + 3] = val;
+        new_board.set_board(a);
+        return new_board;
+    }
+    Board shift_down(vector<int> a, int x) {
+        Board new_board;
+        swap(a[x], a[4 + x]);
+        new_board.set_board(a);
+        return new_board;
     }
     vector <Board> get_all_states() {
         vector <Board> nextstates;
+        nextstates.push_back(clockwise(this->board, 0));
+        nextstates.push_back(clockwise(this->board, 1));
+        nextstates.push_back(clockwise(this->board, 2));
+
+        nextstates.push_back(anti_clockwise(this->board, 0));
+        nextstates.push_back(anti_clockwise(this->board, 1));
+        nextstates.push_back(anti_clockwise(this->board, 2));
+
+        nextstates.push_back(shift_down(this->board, 0));
+        nextstates.push_back(shift_down(this->board, 4));
+        nextstates.push_back(shift_down(this->board, 1));
+        nextstates.push_back(shift_down(this->board, 5));
+        nextstates.push_back(shift_down(this->board, 2));
+        nextstates.push_back(shift_down(this->board, 6));
+        nextstates.push_back(shift_down(this->board, 3));
+        nextstates.push_back(shift_down(this->board, 7));
+
         return nextstates;
     }
     int heuristic_val(Board &goalstate) {
@@ -44,6 +100,12 @@ public:
             heuristic += this->board[i] == goalboard[i];
         }
         return heuristic;
+    }
+    void print() {
+        for (auto x : this->board) {
+            cout << x << " ";
+        }
+        cout << '\n';
     }
     bool is_better(Board &other, Board &goal) {
         return this->heuristic_val(goal) < other.heuristic_val(goal); 
@@ -71,7 +133,7 @@ public:
 //     return val;
 // }
 
-void print(vector <Board> &path) {
+void print(vector <Board> path) {
     for (int i = 0; i < path.size(); ++i) {
         cout << "State " << i << " : ";
         for (auto x : path[i].get_board()) {
@@ -86,7 +148,7 @@ int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0); 
   Board startstate;
-  vector <int> vals;
+  vector <int> vals(12);
   for (int i = 0; i < 12; ++i) {
     cin >> vals[i];
   }
@@ -122,9 +184,10 @@ int32_t main() {
   path.push_back(startstate);
   Board currentstate = startstate;
   Board SUCC = currentstate;
-  while (currentstate != startstate) {
+  while (currentstate != goalstate) {
     Board prevstate = currentstate;
     vector <Board> nextstates = currentstate.get_all_states();
+    //cout << sz(nextstates) << '\n';
     for (auto state : nextstates) {
         if (state == goalstate) {
             path.push_back(state);
@@ -148,3 +211,4 @@ int32_t main() {
   print(path);
   return 0;
 }
+
