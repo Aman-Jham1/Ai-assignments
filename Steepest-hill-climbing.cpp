@@ -6,6 +6,11 @@
 */
 
 /*
+    2 7 9 3 6 1 4 10 12 5 11 8
+    2 3 4 1 6 7 8 5 10 11 12 9
+*/
+
+/*
     Problem: A dart board is filled with 12 sectors. Each sector can perform 4 operations, rotate clockwise, rotate
     anticlockwise, shift down (till center). Given an initial state (Fig. A), design and implement an efficient
     heuristic approach to reach the goal state (Fig B). Use Steepest Ascent Hill-Climbing Search with an
@@ -97,7 +102,7 @@ public:
         int heuristic = 0;
         vector <int> goalboard = goalstate.get_board();
         for (int i = 0; i < 12; ++i) {
-            heuristic += this->board[i] == goalboard[i];
+            heuristic += this->board[i] != goalboard[i];
         }
         return heuristic;
     }
@@ -136,10 +141,7 @@ public:
 void print(vector <Board> path) {
     for (int i = 0; i < path.size(); ++i) {
         cout << "State " << i << " : ";
-        for (auto x : path[i].get_board()) {
-            cout << x << " ";
-        }
-        cout << '\n';
+        path[i].print();
     }
     return;
 }
@@ -181,24 +183,28 @@ int32_t main() {
   //           return path, SOLUTION_NOT_FOUND
   //       path.append(currentstate)
   //   return path, SOLUTION_FOUND
-  path.push_back(startstate);
   Board currentstate = startstate;
+  path.push_back(startstate);
   Board SUCC = currentstate;
+  //cout << goalstate.heuristic_val(goalstate) << '\n';
   while (currentstate != goalstate) {
     Board prevstate = currentstate;
     vector <Board> nextstates = currentstate.get_all_states();
     //cout << sz(nextstates) << '\n';
-    for (auto state : nextstates) {
+    for (auto &state : nextstates) {
         if (state == goalstate) {
             path.push_back(state);
             cout << "SOLUTION FOUND\n";
             print(path);
             return 0;
         }
-        SUCC = state;
-        if (SUCC.is_better(currentstate, goalstate)) {
-            currentstate = SUCC;
+        //SUCC = state;
+        if (state.is_better(SUCC, goalstate)) {
+            SUCC = state;
         }
+    }
+    if (SUCC.is_better(currentstate, goalstate)) {
+        currentstate = SUCC;
     }
     if (currentstate == prevstate) {
         cout << "NO SOLUTION FOUND\n";
