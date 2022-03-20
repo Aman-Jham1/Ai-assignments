@@ -87,9 +87,6 @@ int32_t main() {
   for (int i = 0; i < nodes; ++i) {
     cin >> heuristics_sld[i];
   }
-
-  set <int> closed_list;
-  
   vector <int> parents(nodes);
   
   // auto cmp = [](int a, int b) {
@@ -98,6 +95,7 @@ int32_t main() {
   
   //set <int, decltype(cmp)> open_list;
   set <int, cmp> open_list;
+  set <int> closed_list;
   parents[start] = start;
   g.assign(nodes, 1e9);
   g[start] = 0;
