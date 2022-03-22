@@ -25,25 +25,31 @@ using namespace std;
 #define all(x) x.begin(), x.end()
 #define sz(x) static_cast<int32_t>(x.size())
 
-class Board {
+class Board
+{
 private:
-    vector <int> board;
+    vector<int> board;
+
 public:
-    Board() {
+    Board()
+    {
         this->board.resize(12);
     }
     // Board(const Board &other) {
     //     this->board.resize(12);
     //     this->board = other.get_board();
     // }
-    void set_board(vector <int> board) {
+    void set_board(vector<int> board)
+    {
         this->board = board;
     }
-    vector <int> get_board() {
+    vector<int> get_board()
+    {
         return this->board;
     }
-    vector <int> operate(int sector_no, int type) {
-        vector <int> new_board(12);
+    vector<int> operate(int sector_no, int type)
+    {
+        vector<int> new_board(12);
         new_board = board;
         /*
             OPeration accordingly.
@@ -51,7 +57,8 @@ public:
         //this->board = new_board;
         return board;
     }
-    Board clockwise(vector <int> a, int x) {
+    Board clockwise(vector<int> a, int x)
+    {
         Board new_board;
         int val = a[x * 4 + 3];
         a[4 * x + 3] = a[x * 4 + 2];
@@ -60,8 +67,9 @@ public:
         a[x * 4 + 0] = val;
         new_board.set_board(a);
         return new_board;
-    }   
-    Board anti_clockwise(vector <int> a, int x) {
+    }
+    Board anti_clockwise(vector<int> a, int x)
+    {
         Board new_board;
         int val = a[x * 4 + 0];
         a[4 * x + 0] = a[x * 4 + 1];
@@ -71,14 +79,16 @@ public:
         new_board.set_board(a);
         return new_board;
     }
-    Board shift_down(vector<int> a, int x) {
+    Board shift_down(vector<int> a, int x)
+    {
         Board new_board;
         swap(a[x], a[4 + x]);
         new_board.set_board(a);
         return new_board;
     }
-    vector <Board> get_all_states() {
-        vector <Board> nextstates;
+    vector<Board> get_all_states()
+    {
+        vector<Board> nextstates;
         nextstates.push_back(clockwise(this->board, 0));
         nextstates.push_back(clockwise(this->board, 1));
         nextstates.push_back(clockwise(this->board, 2));
@@ -98,33 +108,38 @@ public:
 
         return nextstates;
     }
-    int heuristic_val(Board goalstate) {
+    int heuristic_val(Board &goalstate)
+    {
         int heuristic = 0;
-        vector <int> goalboard = goalstate.get_board();
-        for (int i = 0; i < 12; ++i) {
-            heuristic += this->board[i] == goalboard[i];
+        vector<int> goalboard = goalstate.get_board();
+        for (int i = 0; i < 12; ++i)
+        {
+            heuristic += this->board[i] != goalboard[i];
         }
         return heuristic;
     }
-    void print() {
-        for (auto x : this->board) {
+    void print()
+    {
+        for (auto x : this->board)
+        {
             cout << x << " ";
         }
         cout << '\n';
     }
-    bool is_better(Board other, Board goal) {
-        return this->heuristic_val(goal) > other.heuristic_val(goal); 
+    bool is_better(Board &other, Board &goal)
+    {
+        return this->heuristic_val(goal) < other.heuristic_val(goal);
     }
-    bool operator == (Board other) {
+    bool operator==(Board &other)
+    {
         return this->board == other.get_board();
     }
-    bool eaquals(Board other, Board goal) {
-        return this->heuristic_val(goal) == other.heuristic_val(goal);
-    }
-    void operator = (Board other) {
+    void operator=(Board &other)
+    {
         this->board = other.get_board();
     }
-    bool operator != (Board other) {
+    bool operator!=(Board &other)
+    {
         return this->board != other.get_board();
     }
 };
@@ -141,84 +156,77 @@ public:
 //     return val;
 // }
 
-void print(vector <Board> path) {
-    for (int i = 0; i < path.size(); ++i) {
+void print(vector<Board> path)
+{
+    for (int i = 0; i < path.size(); ++i)
+    {
         cout << "State " << i << " : ";
         path[i].print();
     }
     return;
 }
 
-int32_t main() {
-  ios_base::sync_with_stdio(0);
-  cin.tie(0); 
-  Board startstate;
-  vector <int> vals(12);
-  for (int i = 0; i < 12; ++i) {
-    cin >> vals[i];
-  }
-  startstate.set_board(vals);
-  Board goalstate;
-  for (int i = 0; i < 12; ++i) {
-    cin >> vals[i];
-  }
-  goalstate.set_board(vals);
-  vector <Board> path;
-  if (startstate == goalstate) {
-    cout << "Start state is goalstate state, 0 steps nedded.\n";
-    return 0;
-  }
-  // def steepest_ascent_hill_climbing(maze):
-  //   currentstate = maze.startstate
-  //   goalstate = maze.goalstate
-  //   path = [currentstate]
-  //   SUCC = currentstate
-  //   while currentstate != goalstate:
-  //       prevstate = currentstate
-  //       for state in maze.nextstate(currentstate):
-  //           if state == goalstate:
-  //               path.append(state)
-  //               return path, SOLUTION_FOUND
-  //           SUCC = state
-  //           if maze.is_better(SUCC, currentstate):
-  //               currentstate = SUCC
-  //       if currentstate == prevstate:
-  //           return path, SOLUTION_NOT_FOUND
-  //       path.append(currentstate)
-  //   return path, SOLUTION_FOUND
-  Board currentstate = startstate;
-  path.push_back(startstate);
-  Board SUCC = currentstate;
-  //cout << goalstate.heuristic_val(goalstate) << '\n';
-  while (true) {
-    Board prevstate = currentstate;
-    vector <Board> nextstates = currentstate.get_all_states();
-    //cout << sz(nextstates) << '\n';
-    for (auto &state : nextstates) {
-        if (state == goalstate) {
-            path.push_back(state);
-            cout << "SOLUTION FOUND\n";
+int32_t main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    Board startstate;
+    vector<int> vals(12);
+    for (int i = 0; i < 12; ++i)
+    {
+        cin >> vals[i];
+    }
+    startstate.set_board(vals);
+    Board goalstate;
+    for (int i = 0; i < 12; ++i)
+    {
+        cin >> vals[i];
+    }
+    goalstate.set_board(vals);
+    vector<Board> path;
+    if (startstate == goalstate)
+    {
+        cout << "Start state is goalstate state, 0 steps nedded.\n";
+        return 0;
+    }
+
+    Board currentstate = startstate;
+    path.push_back(startstate);
+    Board SUCC = currentstate;
+    //cout << goalstate.heuristic_val(goalstate) << '\n';
+    while (currentstate != goalstate)
+    {
+        Board prevstate = currentstate;
+        vector<Board> nextstates = currentstate.get_all_states();
+        //cout << sz(nextstates) << '\n';
+        for (auto &state : nextstates)
+        {
+            if (state == goalstate)
+            {
+                path.push_back(state);
+                cout << "SOLUTION FOUND\n";
+                print(path);
+                return 0;
+            }
+            //SUCC = state;
+            if (state.is_better(SUCC, goalstate))
+            {
+                SUCC = state;
+            }
+        }
+        if (SUCC.is_better(currentstate, goalstate))
+        {
+            currentstate = SUCC;
+        }
+        if (currentstate == prevstate)
+        {
+            cout << "NO SOLUTION FOUND\n";
             print(path);
             return 0;
         }
-        //SUCC = state;
-        if (state.is_better(SUCC, goalstate)) {
-            SUCC = state;
-        }
+        path.push_back(currentstate);
     }
-    if (SUCC.is_better(currentstate, goalstate)) {
-        currentstate = SUCC;
-    }
-    if (currentstate.eaquals(prevstate, goalstate)) {
-        cout << "NO SOLUTION FOUND\n";
-        cout << "MAi yaha pe hu!!!\n";
-        print(path);
-        return 0;
-    }
-    path.push_back(currentstate);
-  }
-  cout << "SOLUTION FOUND\n";
-  print(path);
-  return 0;
+    cout << "SOLUTION FOUND\n";
+    print(path);
+    return 0;
 }
-
