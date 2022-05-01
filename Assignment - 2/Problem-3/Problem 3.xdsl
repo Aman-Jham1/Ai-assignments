@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only -->
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="Assignments">
+			<state id="a0" />
+			<state id="a1" />
+			<probabilities>0.6 0.4</probabilities>
+		</cpt>
+		<cpt id="Exams">
+			<state id="e0" />
+			<state id="e1" />
+			<probabilities>0.8 0.2</probabilities>
+		</cpt>
+		<cpt id="Grades">
+			<state id="g0" />
+			<state id="g1" />
+			<parents>Assignments Exams</parents>
+			<probabilities>0.3 0.7 0.1 0.9 0.4 0.6 0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Placements">
+			<state id="p0" />
+			<state id="p1" />
+			<parents>Grades</parents>
+			<probabilities>0.4 0.6 0.2 0.8</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 3.0.6518.0 ACADEMIC" name="Problem 3">
+			<node id="Assignments">
+				<name>Assignments</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="12" bold="true" />
+				<position>244 115 376 178</position>
+				<barchart active="true" width="128" height="69" />
+			</node>
+			<node id="Exams">
+				<name>Exams</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="11" bold="true" />
+				<position>604 130 704 177</position>
+				<barchart active="true" width="128" height="66" />
+			</node>
+			<node id="Grades">
+				<name>Grades</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="12" bold="true" />
+				<position>397 333 500 413</position>
+				<barchart active="true" width="128" height="69" />
+			</node>
+			<node id="Placements">
+				<name>Placements</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="12" bold="true" />
+				<position>494 559 683 615</position>
+				<barchart active="true" width="128" height="69" />
+			</node>
+		</genie>
+	</extensions>
+</smile>
