@@ -1,0 +1,9 @@
+gives_p(abcd, p) & promise(p) & party(abcd) & ~keeps_p(abcd, p) & person(xyz) & leader(xyz, abcd).
+
+politician(X) & honest(X) & gives_p(X,Y) & promise(Z) => keeps_p(X,Z).
+gives_p(X, Z) & party(X) & person(Y) & leader(Y, X) & promise(Z) => gives_p(Y, Z).
+keeps_p(Y, Z) & person(Y) & party(X) & leader(Y, X) & promise(Z) => keeps_p(X, Z).
+person(X) & leader(Y, X) & party(Y) => politician(X).
+
+
+~person(xyz).

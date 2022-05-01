@@ -1,0 +1,7 @@
+result: proof found
+for input.txt 
+
+proof:
+ 1: [in] -person(xyz).
+ 2: [in] person(xyz).
+ 3: [simp, 1, 2] false
